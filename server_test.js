@@ -19,7 +19,7 @@ var
 //     "Europe/Paris"
 // );
 
-loop.getData(conf, schemas);
+loop.getData(conf, schemas,refresh="on");
 app.use('/api', router.router);
 app.listen(conf.PORT);
 //job.start();

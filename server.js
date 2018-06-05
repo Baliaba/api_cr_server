@@ -9,7 +9,7 @@ var
     schemas = require('./models/schemas.js');
 
 job = new CronJob('*/1 * * * *', () => {
-    loop.getData(conf, schemas); 
+    loop.getData(conf, schemas,refresh="off"); 
     }, () => { /* CronJob every 60s seconds...*/
         console.log("Job stopped");
     },

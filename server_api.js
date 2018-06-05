@@ -204,7 +204,7 @@ router.get('/queue/add/:clantag', function (req, res) {
 
 router.get('/new/:clanTag', function (req, res) {
 	let clanTag = req.params.clanTag;
-			loop.getSimplePlayData(conf, schemas, req.params.clanTag)
+			loop.getData(conf, schemas,refresh="on")
 				.then((msg) => {
 					queue.addQueue(conf, req.params.clanTag);
 					conf.database.ref('history/' + req.params.clanTag).set({
@@ -231,7 +231,7 @@ router.get('/new/:clanTag', function (req, res) {
 })
 router.get('/refresh/:clanTag', function (req, res) {
 	let clanTag = req.params.clanTag;
-	loop.getSimplePlayData(conf, schemas, clanTag).then(() => {
+	loop.getData(conf, schemas,refresh="on").then(() => {
 		conf.database.ref('history/' + clanTag).set({
 			maj: Date.now()
 		}).then(() => {
