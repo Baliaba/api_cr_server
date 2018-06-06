@@ -8,9 +8,9 @@ var
     loop = require('./actions/playActions'),
     schemas = require('./models/schemas.js');
 
-job = new CronJob('*/1 * * * *', () => {
-    loop.getData(conf, schemas,refresh="off"); 
-    }, () => { /* CronJob every 60s seconds...*/
+    job = new CronJob('*/1 * * * *', () => {
+        loop.getData(conf, schemas,refresh=false);
+    }, () => { /* CronJob every 2 seconds...*/
         console.log("Job stopped");
     },
     true,
