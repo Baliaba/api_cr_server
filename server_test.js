@@ -10,16 +10,16 @@ var
     loop = require('./actions/playActions'),
     schemas = require('./models/schemas.js');
     queue = require('./services/queueService.js');
-// job = new CronJob('*/2 * * * *', () => {
-//         loop.getData(conf, schemas);
-//     }, () => { /* CronJob every 2 seconds...*/
-//         console.log("Job stopped");
-//     },
-//     true,
-//     "Europe/Paris"
-// );
+job = new CronJob('*/1 * * * *', () => {
+        loop.getData(conf, schemas,refresh=false);
+    }, () => { /* CronJob every 2 seconds...*/
+        console.log("Job stopped");
+    },
+    true,
+    "Europe/Paris"
+);
 
-loop.getData(conf, schemas);
+//loop.getData(conf, schemas,refresh=true,"88CC09J");
 app.use('/api', router.router);
 app.listen(conf.PORT);
 //job.start();

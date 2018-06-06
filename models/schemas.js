@@ -67,7 +67,20 @@ var cardSchema = new mongoose.Schema({
   _id: false,
   versionKey: false
 });
-
+var warSchema = new mongoose.Schema({
+  _id: 'string',
+  json: 'mixed'
+}, {
+  _id: false,
+  versionKey: false
+});
+var warLogSchema = new mongoose.Schema({
+  _id: 'string',
+  json: 'mixed'
+}, {
+  _id: false,
+  versionKey: false
+});
 
 module.exports = {
   clanHistorySchema,
@@ -76,5 +89,7 @@ module.exports = {
   battleLightSchema,
   cardSchema,
   playerHistorySchema,
-  playerSchema
+  playerSchema,
+  warLogSchema,
+  warSchema
 };
