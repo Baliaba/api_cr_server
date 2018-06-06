@@ -202,36 +202,27 @@ router.get('/queue/add/:clantag', function (req, res) {
 	})
 });
 
-router.get('/new/:clanTag', function (req, res) {
+router.get('/new/:clanTag', async function (req, res) {
 	let clanTag = req.params.clanTag;
-			loop.getData(conf, schemas,refresh="on")
-				.then((msg) => {
-					queue.addQueue(conf, req.params.clanTag);
-					conf.database.ref('history/' + req.params.clanTag).set({
-						maj: Date.now()
-					}).then(() => {
-						res.json({
-							'result': 'done',
-							'code': 200
-						});
-					}).catch((err) => {
-						res.json({
-							'result': 'error',
-							'code': 500
-						});
-					})
-				})
-				.catch((err) => {
-					res.json({
-						'result': err,
-						'code': 300
-					});
-				})
-			
+	await loop.getData(conf, schemas,refresh=true,clanTag);
+		queue.addQueue(conf, req.params.clanTag);
+		conf.database.ref('history/' + req.params.clanTag).set({
+			maj: Date.now()
+		}).then(() => {
+			res.json({
+				'result': 'done',
+				'code': 200
+			});
+		}).catch((err) => {
+			res.json({
+				'result': 'error',
+				'code': 500
+			});
+		})
 })
 router.get('/refresh/:clanTag', function (req, res) {
 	let clanTag = req.params.clanTag;
-	loop.getData(conf, schemas,refresh="on").then(() => {
+	if(loop.getData(conf, schemas,refresh="on")){
 		conf.database.ref('history/' + clanTag).set({
 			maj: Date.now()
 		}).then(() => {
@@ -240,14 +231,13 @@ router.get('/refresh/:clanTag', function (req, res) {
 				'code': 200
 			});
 		})
-	}).catch((err) => {
-		res.json({
-			'error': err.message,
-			'code': 500
-		});
-	})
+	}else{
+		console.log
+	}
+	
 	//Rajouter la date de mise a jour coté firebase
 });
+
 router.get('/warlog/:clantag', function (req, res){ 
 	let clanTag = req.params.clantag;
 	service.callapi(conf.url_clan+clanTag+'/warlog',conf.params)
