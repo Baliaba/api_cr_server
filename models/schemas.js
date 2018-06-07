@@ -69,6 +69,7 @@ var cardSchema = new mongoose.Schema({
 });
 var warSchema = new mongoose.Schema({
   _id: 'string',
+  clan : 'mixed',
   json: 'mixed'
 }, {
   _id: false,
@@ -76,6 +77,7 @@ var warSchema = new mongoose.Schema({
 });
 var warLogSchema = new mongoose.Schema({
   _id: 'string',
+  clan : 'mixed',
   json: 'mixed'
 }, {
   _id: false,
