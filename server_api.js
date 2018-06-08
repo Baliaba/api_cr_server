@@ -220,9 +220,9 @@ router.get('/new/:clanTag', async function (req, res) {
 			});
 		})
 })
-router.get('/refresh/:clanTag', function (req, res) {
+router.get('/refresh/:clanTag', async function (req, res) {
 	let clanTag = req.params.clanTag;
-	if(loop.getData(conf, schemas,refresh="on")){
+	await loop.getData(conf, schemas,refresh=true,clanTag);
 		conf.database.ref('history/' + clanTag).set({
 			maj: Date.now()
 		}).then(() => {
@@ -231,19 +231,45 @@ router.get('/refresh/:clanTag', function (req, res) {
 				'code': 200
 			});
 		})
-	}else{
-		console.log
-	}
 	
 	//Rajouter la date de mise a jour coté firebase
 });
 
 router.get('/warlog/:clantag', function (req, res){ 
 	let clanTag = req.params.clantag;
-	service.callapi(conf.url_clan+clanTag+'/warlog',conf.params)
-		.then((data)=>{
-			res.json(data);
+	mongoose.model('warlog', schemas.warLogSchema).find({
+		clan: clanTag
+	}, (err, warlogData) => {
+		if (err) res.json('{ data : no datas }');
+		let result = [];
+		warlogData.forEach((obj) => {
+			let line = {
+				'id': obj._id,
+				'warlog': obj.json
+			}
+			result.push(line)
 		})
+		res.json(result);
+	});
+});
+router.get('/war/:clantag', function (req, res){ 
+	let clanTag = req.params.clantag;
+	mongoose.model('war', schemas.warSchema).find({
+		clan: clanTag
+	}, (err, warData) => {
+		if (err) res.json('{ data : no datas }');
+		let result = [];
+		warData.forEach((obj) => {
+			let line = {
+				'id': obj._id,
+				'warlog': obj.json
+			}
+				result.push(line)
+		})
+		if(result.length>1)
+			res.json(result);
+		res.json(result[0]);	
+		});
 });
 router.get('/war/:clantag', function (req, res) {
 	let clanTag = req.params.clantag;
