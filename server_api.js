@@ -244,7 +244,7 @@ router.get('/warlog/:clantag', function (req, res){
 		let result = [];
 		warlogData.forEach((obj) => {
 			let line = {
-				'id': obj._id,
+				'date':  obj._id.split("_")[1],
 				'warlog': obj.json
 			}
 			result.push(line)
@@ -261,8 +261,8 @@ router.get('/war/:clantag', function (req, res){
 		let result = [];
 		warData.forEach((obj) => {
 			let line = {
-				'id': obj._id,
-				'warlog': obj.json
+				'date':  obj._id.split("_")[1],
+				'war': obj.json
 			}
 				result.push(line)
 		})
