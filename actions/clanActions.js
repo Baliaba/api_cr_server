@@ -18,18 +18,21 @@ var warHelper = require('./../clanHelper/warHelper.js');
                         let data = {
                             urlPlay: urlPlay,
                             clanTag: response.clan,
-                            key    :response.key
                         }
-                        obj ={
-                            war : resp[1],
-                            warlog : resp[2]
-                        }
-                        warHelper.TraitementWar(obj,conf,schemas,response.clan)
+                       console.log("--", resp[1].state);
+                        if(resp[1].state !="notInWar"){
+                            obj ={
+                                war : resp[1],
+                                warlog : resp[2]
+                            }
+                            warHelper.TraitementWar(obj,conf,schemas,response.clan)
                             .then(talk =>{
-                                console.log(talk);
+                               // console.log(talk);
                             })
+                        }
                         resolve(data);
-                    }).catch((err)=>{console.log("tratiement clan  Error ",err.message)})
+                    })
+                    //.catch((err)=>{console.log("tratiement clan  Error ",err.message)})
                 })
             }).catch((err)=>{console.log("Fetch queue Error",err.message)})
        }else{
