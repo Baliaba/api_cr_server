@@ -271,13 +271,6 @@ router.get('/war/:clantag', function (req, res){
 		res.json(result[0]);	
 		});
 });
-router.get('/war/:clantag', function (req, res) {
-	let clanTag = req.params.clantag;
-	service.callapi(conf.url_clan+clanTag+'/war',conf.params)
-		.then((data)=>{
-			res.json(data);
-		})
-});
 
 
 app.use('/api', router);
