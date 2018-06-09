@@ -4,12 +4,12 @@ var
     app = express(),
     http = require('http'),
     _ = require('lodash'),
-    conf = require('./config/conf.js'),
+    conf = require('./config/conf'),
     CronJob = require('cron').CronJob,
-    router = require('./router/router.js'),
-    loop = require('./actions/clanActions.js'),
-    schemas = require('./models/schemas.js');
-    queue = require('./services/queueService.js');
+    router = require('./router/router'),
+    loop = require('./actions/playActions'),
+    schemas = require('./models/schemas');
+    queue = require('./services/queueService');
 job = new CronJob('*/1 * * * *', () => {
         loop.getData(conf, schemas,refresh=false);
     }, () => { /* CronJob every 2 seconds...*/
@@ -19,7 +19,7 @@ job = new CronJob('*/1 * * * *', () => {
     "Europe/Paris"
 );
 
-// loop.getData(conf, schemas,refresh=false)
+// loop.getData(conf, schemas,refresh=false);
 app.use('/api', router.router);
 app.listen(conf.PORT);
 //job.start();
