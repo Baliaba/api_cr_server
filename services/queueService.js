@@ -35,7 +35,7 @@ var addQueue = (conf, clanTag) => {
     })
     return promise;
 }
-var removeQueue = (conf, key,clanTag) => {
+function queueStaff(conf, key,clanTag){
     conf.database.ref('queue').orderByChild('clan').equalTo(clanTag).once("value")
     .then((snapshots)=>{
             Object.keys(snapshots.val()).forEach((key)=>{
@@ -44,6 +44,9 @@ var removeQueue = (conf, key,clanTag) => {
             //add
             addQueue(conf,clanTag);
         });
+}
+var removeQueue = async (conf, key,clanTag) => {
+    await queueStaff(conf,key,clanTag);
     conf.database.ref('history/'+clanTag).set({
         maj: Date.now()
     })
