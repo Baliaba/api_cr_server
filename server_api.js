@@ -202,36 +202,27 @@ router.get('/queue/add/:clantag', function (req, res) {
 	})
 });
 
-router.get('/new/:clanTag', function (req, res) {
+router.get('/new/:clanTag', async function (req, res) {
 	let clanTag = req.params.clanTag;
-			loop.getSimplePlayData(conf, schemas, req.params.clanTag)
-				.then((msg) => {
-					queue.addQueue(conf, req.params.clanTag);
-					conf.database.ref('history/' + req.params.clanTag).set({
-						maj: Date.now()
-					}).then(() => {
-						res.json({
-							'result': 'done',
-							'code': 200
-						});
-					}).catch((err) => {
-						res.json({
-							'result': 'error',
-							'code': 500
-						});
-					})
-				})
-				.catch((err) => {
-					res.json({
-						'result': err,
-						'code': 300
-					});
-				})
-			
+	await loop.getData(conf, schemas,refresh=true,clanTag);
+		queue.addQueue(conf, req.params.clanTag);
+		conf.database.ref('history/' + req.params.clanTag).set({
+			maj: Date.now()
+		}).then(() => {
+			res.json({
+				'result': 'done',
+				'code': 200
+			});
+		}).catch((err) => {
+			res.json({
+				'result': 'error',
+				'code': 500
+			});
+		})
 })
-router.get('/refresh/:clanTag', function (req, res) {
+router.get('/refresh/:clanTag', async function (req, res) {
 	let clanTag = req.params.clanTag;
-	loop.getSimplePlayData(conf, schemas, clanTag).then(() => {
+	await loop.getData(conf, schemas,refresh=true,clanTag);
 		conf.database.ref('history/' + clanTag).set({
 			maj: Date.now()
 		}).then(() => {
@@ -240,27 +231,45 @@ router.get('/refresh/:clanTag', function (req, res) {
 				'code': 200
 			});
 		})
-	}).catch((err) => {
-		res.json({
-			'error': err.message,
-			'code': 500
-		});
-	})
+	
 	//Rajouter la date de mise a jour coté firebase
 });
+
 router.get('/warlog/:clantag', function (req, res){ 
 	let clanTag = req.params.clantag;
-	service.callapi(conf.url_clan+clanTag+'/warlog',conf.params)
-		.then((data)=>{
-			res.json(data);
+	mongoose.model('warlog', schemas.warLogSchema).find({
+		clan: clanTag
+	}, (err, warlogData) => {
+		if (err) res.json('{ data : no datas }');
+		let result = [];
+		warlogData.forEach((obj) => {
+			let line = {
+				'date':  obj._id.split("_")[1],
+				'warlog': obj.json
+			}
+			result.push(line)
 		})
+		res.json(result);
+	});
 });
-router.get('/war/:clantag', function (req, res) {
+router.get('/war/:clantag', function (req, res){ 
 	let clanTag = req.params.clantag;
-	service.callapi(conf.url_clan+clanTag+'/war',conf.params)
-		.then((data)=>{
-			res.json(data);
+	mongoose.model('war', schemas.warSchema).find({
+		clan: clanTag
+	}, (err, warData) => {
+		if (err) res.json('{ data : no datas }');
+		let result = [];
+		warData.forEach((obj) => {
+			let line = {
+				'date':  obj._id.split("_")[1],
+				'war': obj.json
+			}
+				result.push(line)
 		})
+		if(result.length>1)
+			res.json(result);
+		res.json(result[0]);	
+		});
 });
 
 

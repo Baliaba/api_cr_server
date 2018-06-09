@@ -11,9 +11,10 @@ admin.initializeApp({
 const params = {
 	method: 'GET',
 	headers: {
-		'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMzLCJpZGVuIjoiNDA2MDE5ODI4MTE0MTI4ODk2IiwibWQiOnt9LCJ0cyI6MTUyODAyNDI4NTMyM30.uWMw0aeMMR4VNsSAm_mGD0sVJMa2w3PjzSFf7uMsz1k',
+		//'auth': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMzLCJpZGVuIjoiNDA2MDE5ODI4MTE0MTI4ODk2IiwibWQiOnt9LCJpYXQiOjE1MjYwMjQ3Mjl9.JkDJqvYBZBRWF098ImK5inVi9wGP05GcX06xeTPrGuc',
 		//'auth': '4ea1ab62d8bb43a58e8af5a037a04394fdfe59faefc94c5d81a882114f9fc6d5',
-		'Content-Type': 'application/x-www-form-urlencoded'
+		'auth' : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMzLCJpZGVuIjoiNDA2MDE5ODI4MTE0MTI4ODk2IiwibWQiOnt9LCJ0cyI6MTUyODAyNDI4NTMyM30.uWMw0aeMMR4VNsSAm_mGD0sVJMa2w3PjzSFf7uMsz1k',
+		'Content-Type': 'application/json'
 	}
 };
 ///////////////////// API_BASE_URL
@@ -35,7 +36,7 @@ const db_params_prod = {
 	_port: '27017/',
 	_db_name: 'stats-cr-clan'
 }
-const PORT = 80;
+const PORT = 8000;
 const options = {
 	useMongoClient: true,
 	reconnectTries: Number.MAX_VALUE,

@@ -1,5 +1,5 @@
 var getQueue = (firebase) => {
-    console.log("Debut de traitement " + Date.now());
+   // console.log("Debut de traitement " + Date.now());
     var promise = new Promise(
         function (resolve, reject) {
             /* Tour de passe passe passe magic !  Mdr...*/
@@ -7,12 +7,12 @@ var getQueue = (firebase) => {
             return DBqueue.once('value')
                 .then(function (snapshot) {
                     var key = Object.keys(snapshot.val())[0];
-                    console.log(key);
                     var dataKey = snapshot.val()[key];
                     var obj = {
                         _dataKey: dataKey,
                         _key: key
                     }
+                    console.log(key ,"#"+dataKey.clan );
                     resolve(obj);
                 })
                 .catch(e => {
@@ -27,8 +27,8 @@ var addQueue = (conf, clanTag) => {
         conf.database.ref('queue').push({
             clan : clanTag
         }).then(() => {
-            console.log("Fin de traitement " +  Date.now());
             resolve('ok');
+            console.log("Fin de traitement " +  Date.now());
         }).catch((err) => {
             console.log(err)
         })
@@ -46,7 +46,13 @@ function queueStaff(conf, key,clanTag){
         });
 }
 var removeQueue = async (conf, key,clanTag) => {
+   try {
     await queueStaff(conf,key,clanTag);
+   } catch (error) {
+    conf.database.ref('history/'+clanTag).set({
+        maj: Date.now()
+    })
+   }
     conf.database.ref('history/'+clanTag).set({
         maj: Date.now()
     })

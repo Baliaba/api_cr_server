@@ -4,16 +4,15 @@ function callapi(link, param) {
   //console.log(link);
   var promise = new Promise((resolve, reject) => {
     fetch(link, param)
-      .catch(e => {
-        console.log('call api fetch error', e.message);
-      })
-      .then(response => response.json())
-      .then(data => {
-        resolve(data);
-      })
-      .catch(e => {
-        console.log('call api promise reject error', e.message);
-      })
+    .then(function(res) {
+      return res.json();
+    }).then(function(json) {
+     resolve(json);
+    })
+    .catch(function(err) {
+      console.log("err");
+      resolve({error : "empty"})
+    });
   });
   return promise;
 }
